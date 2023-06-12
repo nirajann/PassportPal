@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "808875064250",
+    "project_id": "passportpal-3d3d5",
+    "storage_bucket": "passportpal-3d3d5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808875064250:android:74ab720bb10c0669633b83",
+        "android_client_info": {
+          "package_name": "com.example.passportpal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808875064250-oee7d12ej7knkujn6la3lion7m890bal.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCR6FgeeSVWnyAUGotBsLq6ReTUdYG7o5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "808875064250-oee7d12ej7knkujn6la3lion7m890bal.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
