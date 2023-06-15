@@ -126,16 +126,16 @@ class _FeedScreenState extends State<FeedScreen> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      selectedCountry = 'Can';
+                      selectedCountry = 'CAN';
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: selectedCountry == 'Can'
+                    backgroundColor: selectedCountry == 'CAN'
                         ? const Color.fromRGBO(154, 150, 252, 1)
                         : Colors.grey,
                     fixedSize: const Size(30, 30),
                   ),
-                  child: const Text('Can'),
+                  child: const Text('CAN'),
                 ),
                 ElevatedButton(
                   onPressed: () {

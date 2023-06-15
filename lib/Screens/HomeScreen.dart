@@ -1,3 +1,4 @@
+import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  bool showSearchBar = false;
+  bool showitem = true;
 
   @override
   void dispose() {
@@ -66,106 +67,59 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: whiteColor,
             body: Column(
               children: [
-                showSearchBar
-                    ? const SizedBox(height: 60)
-                    : const SizedBox(height: 0),
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  height: showSearchBar ? 100 : 0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 350,
-                        child: TextField(
-                          controller: searchController,
-                          decoration: InputDecoration(
-                            hintText: 'Search...',
-                            hintStyle: const TextStyle(color: Colors.white),
-                            prefixIcon: IconButton(
-                              onPressed: () {
-                                // Handle the search button click event
-                                searchCountries();
-                              },
-                              icon:
-                                  const Icon(Icons.search, color: Colors.white),
-                            ),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  showSearchBar = false;
-                                  isShowUser = false;
-                                });
-                                searchController.clear();
-                              },
-                              icon:
-                                  const Icon(Icons.clear, color: Colors.white),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            filled: true,
-                            fillColor: navyBlue,
-                          ),
-                          style: const TextStyle(color: Colors.white),
-                          onSubmitted: (String _) {
-                            searchCountries();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+                const SizedBox(
+                  height: 60,
                 ),
-                showSearchBar
-                    ? const SizedBox(height: 0)
-                    : const SizedBox(height: 60),
                 SizedBox(
-                  height: showSearchBar ? 0 : 60,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if (!showSearchBar) ...[
-                        const Padding(
-                          padding: EdgeInsets.only(left: 16.0),
-                          child: Text(
-                            "Discover",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: navyBlue,
-                            ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 16.0),
+                        child: Text(
+                          "Discover",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: navyBlue,
                           ),
                         ),
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  showSearchBar = !showSearchBar;
-                                });
-                              },
-                              icon: const Icon(Icons.search),
-                              color: navyBlue,
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const NotificationScreen(),
-                                  ),
-                                );
-                              },
-                              icon: const Icon(
-                                  Icons.notifications_active_outlined),
-                              color: navyBlue,
-                            ),
-                          ],
-                        ),
-                      ],
+                      ),
+                      Row(
+                        children: [
+                          AnimSearchBar(
+                            width: 200,
+                            searchIconColor: navyBlue,
+                            textController: searchController,
+                            onSuffixTap: () {
+                              setState(() {
+                                searchController.clear();
+                              });
+                            },
+                            helpText: "Search Text...",
+                            autoFocus: true,
+                            onSubmitted: (String searchController) =>
+                                searchCountries(),
+                            closeSearchOnSuffixTap: true,
+                            animationDurationInMilli: 2000,
+                            rtl: true,
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const NotificationScreen(),
+                                ),
+                              );
+                            },
+                            icon:
+                                const Icon(Icons.notifications_active_outlined),
+                            color: navyBlue,
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
