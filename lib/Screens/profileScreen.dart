@@ -96,6 +96,7 @@ class ProfileScreen extends StatelessWidget {
                           username: userData?['username'],
                           email: userData?['email'],
                           photoUrl: userData?['photourl'],
+                          phone: userData?['phoneno'],
                         ),
                       ),
                     );

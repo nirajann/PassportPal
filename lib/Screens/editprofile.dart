@@ -5,17 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:passportpal/utlis/colors.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final String? username;
   final String? email;
   final String? photoUrl;
+  final String? phone;
 
   const EditProfileScreen({
     Key? key,
     this.username,
     this.email,
     this.photoUrl,
+    this.phone,
   }) : super(key: key);
 
   @override
@@ -26,18 +29,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   File? _image;
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _usernameController.text = widget.username ?? '';
     _emailController.text = widget.email ?? '';
+    _phoneController.text = widget.phone ?? '';
   }
 
   @override
   void dispose() {
     _usernameController.dispose();
     _emailController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -56,6 +62,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final user = FirebaseAuth.instance.currentUser;
     final username = _usernameController.text;
     final email = _emailController.text;
+    final phoneno = _phoneController.text;
 
     if (user != null) {
       try {
@@ -66,6 +73,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             .update({
           'username': username,
           'email': email,
+          'phoneno': phoneno,
         });
 
         // Update profile photo if an image was selected
@@ -113,16 +121,61 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteColor,
       appBar: AppBar(
-        title: const Text('Edit Profile'),
+        title: const Center(child: Text('Edit Profile')),
+        backgroundColor: primaryColor,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 155, 0, 0),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: Container(
+              height: 150,
+              color: primaryColor,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(140, 90, 0, 0),
+            child: InkWell(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Choose an option'),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            GestureDetector(
+                              child: const Text('Gallery'),
+                              onTap: () {
+                                selectImage(ImageSource.gallery);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            const Padding(padding: EdgeInsets.all(8.0)),
+                            GestureDetector(
+                              child: const Text('Camera'),
+                              onTap: () {
+                                selectImage(ImageSource.camera);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
               child: Container(
+                height: 100,
+                width: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.black),
+                ),
                 child: _image != null
                     ? CircleAvatar(
                         radius: 64,
@@ -138,64 +191,161 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
               ),
             ),
-            Positioned(
-              bottom: 0,
-              left: 120,
-              child: IconButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Choose an option'),
-                        content: SingleChildScrollView(
-                          child: ListBody(
-                            children: <Widget>[
-                              GestureDetector(
-                                child: const Text('Gallery'),
-                                onTap: () {
-                                  selectImage(ImageSource.gallery);
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              const Padding(padding: EdgeInsets.all(8.0)),
-                              GestureDetector(
-                                child: const Text('Camera'),
-                                onTap: () {
-                                  selectImage(ImageSource.camera);
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(140, 210, 0, 10),
+            child: Text(
+              'Change Picture',
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 240, 0, 10),
+            child: Center(
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(35, 0, 0, 5),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Username",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
-                      );
-                    },
-                  );
-                },
-                icon: const Icon(Icons.add_a_photo, color: Colors.white),
+                      ),
+                      Container(
+                        height: 45,
+                        width: 318,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.black),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
+                          child: TextFormField(
+                            controller: _usernameController,
+                            decoration: const InputDecoration(
+                              labelText: 'Username',
+                              border: InputBorder.none,
+                            ),
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16.0),
+                  Column(
+                    children: [
+                      Column(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(35, 0, 0, 5),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Email",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 45,
+                            width: 318,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.black),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
+                              child: TextFormField(
+                                controller: _emailController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Email',
+                                  border: InputBorder.none,
+                                ),
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16.0),
+                  Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(35, 0, 0, 5),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Phone",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 45,
+                        width: 318,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.black),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
+                          child: TextFormField(
+                            controller: _phoneController,
+                            decoration: const InputDecoration(
+                              labelText: 'phone',
+                              border: InputBorder.none,
+                            ),
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16.0),
+                  Container(
+                    height: 40,
+                    width: 283,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: updateProfile,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text(
+                        'Update',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 16.0),
-            TextFormField(
-              controller: _usernameController,
-              decoration: const InputDecoration(
-                labelText: 'Username',
-              ),
-            ),
-            TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: updateProfile,
-              child: const Text('Update Profile'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

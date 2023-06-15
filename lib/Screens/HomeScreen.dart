@@ -27,6 +27,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  bool _isSearchBarVisible = true;
+
+  void _toggleSearchBar() {
+    setState(() {
+      _isSearchBarVisible = false;
+    });
+  }
+
   bool showitem = true;
 
   @override
@@ -70,25 +78,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 60,
                 ),
-                SizedBox(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 16.0),
-                        child: Text(
-                          "Discover",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: navyBlue,
-                          ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 16.0),
+                      child: Text(
+                        "Discover",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: navyBlue,
                         ),
                       ),
-                      Row(
-                        children: [
-                          AnimSearchBar(
-                            width: 200,
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _toggleSearchBar();
+                          },
+                          child: AnimSearchBar(
+                            width: 220,
                             searchIconColor: navyBlue,
                             textController: searchController,
                             onSuffixTap: () {
@@ -100,33 +111,32 @@ class _HomeScreenState extends State<HomeScreen> {
                             autoFocus: true,
                             onSubmitted: (String searchController) =>
                                 searchCountries(),
-                            closeSearchOnSuffixTap: true,
-                            animationDurationInMilli: 2000,
-                            rtl: true,
+                            closeSearchOnSuffixTap: false,
+                            animationDurationInMilli: 500,
+                            rtl: false,
                           ),
-                          IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const NotificationScreen(),
-                                ),
-                              );
-                            },
-                            icon:
-                                const Icon(Icons.notifications_active_outlined),
-                            color: navyBlue,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const NotificationScreen(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.notifications_active_outlined),
+                          color: navyBlue,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 isShowUser
                     ? const SizedBox()
                     : Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                         child: Container(
                           width: double.infinity,
                           height: 160,
@@ -204,13 +214,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                 isShowUser
-                    ? const Text(
-                        'Search Result',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    ? Column(
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.arrow_back),
+                            color: navyBlue,
+                          ),
+                          const Text(
+                            'Search Result',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       )
                     : Column(
                         children: [

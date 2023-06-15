@@ -102,20 +102,26 @@ class _UniScreenState extends State<UniScreen> {
                   final String text = data['uniname'] as String;
                   final String unilocation = data['unilocation'] as String;
                   final String logo = data['logo'] as String;
+                  final String description = data['unides'] as String;
+                  final int fee = data['unifee'];
+                  final int rate = data['unirate'];
 
                   final Color color =
                       gridItemColors[index % gridItemColors.length];
 
                   return GestureDetector(
                     onTap: () {
-                      navigateToUniversityDetail(
-                          context, text, unilocation, logo);
+                      navigateToUniversityDetail(context, text, unilocation,
+                          logo, description, fee, rate);
                     },
                     child: RectangleCard(
                       text: text,
                       unilocation: unilocation,
                       color: color,
                       imagePath: logo,
+                      description: description,
+                      fee: fee,
+                      rate: rate,
                     ),
                   );
                 }).toList(),
@@ -128,7 +134,13 @@ class _UniScreenState extends State<UniScreen> {
   }
 
   void navigateToUniversityDetail(
-      BuildContext context, String text, String unilocation, String logo) {
+      BuildContext context,
+      String text,
+      String unilocation,
+      String logo,
+      String description,
+      int unirate,
+      int fee) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -136,6 +148,9 @@ class _UniScreenState extends State<UniScreen> {
           text: text,
           unilocation: unilocation,
           logo: logo,
+          description: description,
+          rate: unirate,
+          fee: fee,
         ),
       ),
     );
@@ -147,6 +162,9 @@ class RectangleCard extends StatelessWidget {
   final String unilocation;
   final Color color;
   final String imagePath;
+  final String description;
+  final int rate;
+  final int fee;
 
   const RectangleCard({
     Key? key,
@@ -154,6 +172,9 @@ class RectangleCard extends StatelessWidget {
     required this.unilocation,
     required this.color,
     required this.imagePath,
+    required this.description,
+    required this.rate,
+    required this.fee,
   }) : super(key: key);
 
   @override
@@ -162,63 +183,66 @@ class RectangleCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          navigateToUniversityDetail(context, text, unilocation, imagePath);
+          navigateToUniversityDetail(
+              context, text, unilocation, imagePath, description, rate, fee);
         },
-        child: Container(
-          width: 332,
-          height: 135,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: color,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                spreadRadius: 2,
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image(
-                image: NetworkImage(imagePath),
-                width: 100,
-                height: 100,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(5, 45, 0, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        text,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Center(
-                        child: Text(
-                          unilocation,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: Container(
+            width: 332,
+            height: 135,
+            decoration: BoxDecoration(
+              color: color,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image(
+                  image: NetworkImage(imagePath),
+                  width: 100,
+                  height: 100,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 45, 0, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          text,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 12,
+                            fontSize: 20,
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 4),
+                        Center(
+                          child: Text(
+                            unilocation,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -226,7 +250,13 @@ class RectangleCard extends StatelessWidget {
   }
 
   void navigateToUniversityDetail(
-      BuildContext context, String text, String unilocation, String logo) {
+      BuildContext context,
+      String text,
+      String unilocation,
+      String logo,
+      String description,
+      int unirate,
+      int fee) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -234,22 +264,25 @@ class RectangleCard extends StatelessWidget {
           text: text,
           unilocation: unilocation,
           logo: logo,
+          description: description,
+          rate: unirate,
+          fee: fee,
         ),
       ),
     );
   }
 }
 
-void navigateToUniversityDetail(
-    BuildContext context, String text, String unilocation, String logo) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => UniversityDetailPage(
-        text: text,
-        unilocation: unilocation,
-        logo: logo,
-      ),
-    ),
-  );
-}
+// void navigateToUniversityDetail(
+//     BuildContext context, String text, String unilocation, String logo) {
+//   Navigator.push(
+//     context,
+//     MaterialPageRoute(
+//       builder: (context) => UniversityDetailPage(
+//         text: text,
+//         unilocation: unilocation,
+//         logo: logo,
+//       ),
+//     ),
+//   );
+// }

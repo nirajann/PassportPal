@@ -38,7 +38,7 @@ class _FeedScreenState extends State<FeedScreen> {
         centerTitle: false,
         leading: IconButton(
           icon: const Icon(Icons.add_a_photo),
-          color: Colors.blue,
+          color: Colors.black,
           onPressed: () {
             Navigator.push(
               context,
@@ -60,31 +60,34 @@ class _FeedScreenState extends State<FeedScreen> {
       ),
       body: Stack(
         children: [
-          TextField(
-            controller: searchController,
-            decoration: InputDecoration(
-              hintText: 'Search...',
-              hintStyle: const TextStyle(color: Colors.white),
-              suffixIcon: IconButton(
-                onPressed: () {
-                  // Handle the search button click event
-                },
-                icon: const Icon(Icons.search, color: Colors.white),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 3, 15, 0),
+            child: TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                hintText: 'Search...',
+                hintStyle: const TextStyle(color: Colors.white),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    // Handle the search button click event
+                  },
+                  icon: const Icon(Icons.search, color: Colors.white),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                filled: true,
+                fillColor: primaryColor,
               ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              filled: true,
-              fillColor: Colors.blue,
+              style: const TextStyle(color: Colors.white),
+              onSubmitted: (String value) {
+                // Perform search operation with the submitted value
+                // You can update the UI or trigger a search function here
+                setState(() {
+                  // Update the search results
+                });
+              },
             ),
-            style: const TextStyle(color: Colors.white),
-            onSubmitted: (String value) {
-              // Perform search operation with the submitted value
-              // You can update the UI or trigger a search function here
-              setState(() {
-                // Update the search results
-              });
-            },
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(
@@ -104,8 +107,11 @@ class _FeedScreenState extends State<FeedScreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                        selectedCountry == 'All' ? Colors.blue : Colors.grey,
+                        selectedCountry == 'All' ? navyBlue : primaryColor,
                     fixedSize: const Size(30, 30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   child: const Text('All'),
                 ),
@@ -116,10 +122,12 @@ class _FeedScreenState extends State<FeedScreen> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: selectedCountry == 'USA'
-                        ? const Color.fromRGBO(154, 150, 252, 1)
-                        : Colors.grey,
+                    backgroundColor:
+                        selectedCountry == 'USA' ? navyBlue : primaryColor,
                     fixedSize: const Size(30, 30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   child: const Text('USA'),
                 ),
@@ -130,10 +138,12 @@ class _FeedScreenState extends State<FeedScreen> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: selectedCountry == 'CAN'
-                        ? const Color.fromRGBO(154, 150, 252, 1)
-                        : Colors.grey,
+                    backgroundColor:
+                        selectedCountry == 'CAN' ? navyBlue : primaryColor,
                     fixedSize: const Size(30, 30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   child: const Text('CAN'),
                 ),
@@ -144,10 +154,12 @@ class _FeedScreenState extends State<FeedScreen> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: selectedCountry == 'Jap'
-                        ? const Color.fromRGBO(154, 150, 252, 1)
-                        : Colors.grey,
+                    backgroundColor:
+                        selectedCountry == 'Jap' ? navyBlue : primaryColor,
                     fixedSize: const Size(30, 30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   child: const Text('Jap'),
                 ),
@@ -158,10 +170,12 @@ class _FeedScreenState extends State<FeedScreen> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: selectedCountry == 'Aus'
-                        ? const Color.fromRGBO(154, 150, 252, 1)
-                        : Colors.grey,
+                    backgroundColor:
+                        selectedCountry == 'Aus' ? navyBlue : primaryColor,
                     fixedSize: const Size(30, 30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   child: const Text('Aus'),
                 ),

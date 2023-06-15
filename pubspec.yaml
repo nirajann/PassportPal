@@ -48,6 +48,8 @@ dependencies:
   flutter_svg: ^2.0.5
   carousel_slider: ^4.2.1
   anim_search_bar: ^2.0.3
+  flutter_search_bar: ^2.1.0
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:

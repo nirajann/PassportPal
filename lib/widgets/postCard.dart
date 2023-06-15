@@ -68,7 +68,7 @@ class _PostCardState extends State<PostCard> {
                   Text(
                     widget.snap['username'],
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, color: primaryColor),
+                        fontWeight: FontWeight.bold, color: Colors.black),
                   )
                 ],
               ),
@@ -178,7 +178,7 @@ class _PostCardState extends State<PostCard> {
                         )
                       : const Icon(
                           Icons.favorite_border,
-                          color: primaryColor,
+                          color: Colors.black,
                         )),
             ),
             IconButton(
@@ -191,7 +191,7 @@ class _PostCardState extends State<PostCard> {
                     ),
                 icon: const Icon(
                   Icons.comment_outlined,
-                  color: primaryColor,
+                  color: Colors.black,
                 )),
             IconButton(
                 onPressed: () {},
@@ -206,7 +206,7 @@ class _PostCardState extends State<PostCard> {
                         onPressed: () {},
                         icon: const Icon(
                           Icons.bookmark_outline,
-                          color: primaryColor,
+                          color: Colors.black,
                         ))))
           ],
         ),
@@ -233,7 +233,7 @@ class _PostCardState extends State<PostCard> {
                 child: RichText(
                     text: TextSpan(
                         style: const TextStyle(
-                          color: primaryColor,
+                          color: Colors.black,
                         ),
                         children: [
                       TextSpan(
@@ -254,7 +254,7 @@ class _PostCardState extends State<PostCard> {
               Container(
                 child: Text(
                   'View All $commentLen comments',
-                  style: const TextStyle(fontSize: 16, color: primaryColor),
+                  style: const TextStyle(fontSize: 16, color: Colors.black),
                 ),
               ),
               Container(
