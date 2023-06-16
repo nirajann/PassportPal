@@ -34,7 +34,7 @@ class _UniScreenState extends State<UniScreen> {
             "SELECT FIELD",
             style: TextStyle(
               fontSize: 35,
-              color: primaryColor,
+              color: navyBlue,
               fontWeight: FontWeight.bold,
             ),
           ),
