@@ -4,7 +4,7 @@ import 'package:passportpal/utlis/colors.dart';
 import 'package:passportpal/utlis/globelVariable.dart';
 
 class MobileScreenLayout extends StatefulWidget {
-  const MobileScreenLayout({super.key});
+  const MobileScreenLayout({Key? key}) : super(key: key);
 
   @override
   State<MobileScreenLayout> createState() => _MobileScreenLayoutState();
@@ -57,8 +57,11 @@ class CurvedBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
 
-  const CurvedBottomNavigationBar(
-      {super.key, required this.currentIndex, required this.onTap});
+  const CurvedBottomNavigationBar({
+    Key? key,
+    required this.currentIndex,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

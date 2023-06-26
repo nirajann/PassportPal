@@ -1,12 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:passportpal/Screens/post.dart';
 import 'package:passportpal/provider/user_provider.dart';
 import 'package:passportpal/resources/FirestoreMethod.dart';
 import 'package:passportpal/utlis/colors.dart';
 import 'package:passportpal/utlis/utlis.dart';
-import 'package:passportpal/widgets/postCard.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user.dart';
@@ -31,6 +30,8 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -38,7 +39,7 @@ class _FeedScreenState extends State<FeedScreen> {
         centerTitle: false,
         leading: IconButton(
           icon: const Icon(Icons.add_a_photo),
-          color: Colors.black,
+          color: primaryColor,
           onPressed: () {
             Navigator.push(
               context,
@@ -51,7 +52,7 @@ class _FeedScreenState extends State<FeedScreen> {
           child: Text(
             'PassportPal',
             style: TextStyle(
-              color: Colors.blue,
+              color: primaryColor,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -182,51 +183,9 @@ class _FeedScreenState extends State<FeedScreen> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 110, 0, 0),
-            child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: FirebaseFirestore.instance
-                  .collection('posts')
-                  .where('description',
-                      isEqualTo:
-                          selectedCountry != 'All' ? selectedCountry : null)
-                  .where('description', isGreaterThanOrEqualTo: selectedCountry)
-                  .snapshots(),
-              builder: (
-                context,
-                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
-              ) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: Colors.blue,
-                      color: Colors.amber,
-                    ),
-                  );
-                }
-
-                if (snapshot.hasData) {
-                  // Check if snapshot has data before accessing it
-                  final filteredPosts = snapshot.data!.docs
-                      .where((doc) => doc['username']
-                          .toLowerCase()
-                          .contains(searchController.text.toLowerCase()))
-                      .toList();
-
-                  return ListView.builder(
-                    itemCount: filteredPosts.length,
-                    itemBuilder: (context, index) => PostCard(
-                      snap: filteredPosts[index].data(),
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return const Text('No data available');
-                }
-              },
-            ),
-          ),
+          PostsWidget(
+              selectedCountry: selectedCountry,
+              searchController: searchController)
         ],
       ),
     );

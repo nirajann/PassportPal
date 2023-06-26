@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:passportpal/Screens/loginScreen.dart';
 import 'package:passportpal/Screens/processScreen.dart';
 
 class ItemWidget extends StatelessWidget {
@@ -14,15 +16,75 @@ class ItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
+      onTap: () async {
+        User? user = FirebaseAuth.instance.currentUser;
+
+        if (user == null) {
+          // Show login prompt
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text(
+                  'Login Required',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                content: const Text(
+                  'Please log in to continue.',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                backgroundColor: Colors.blue[900],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      // Close the dialog
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen()),
+                      );
+                    },
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
               builder: (context) => ProcessScreen(
-                    image: image,
-                    title: title,
-                  )), // Replace 'ProcessScreen' with your actual screen widget
-        );
+                image: image,
+                title: title,
+              ),
+            ),
+          );
+        }
       },
       child: Container(
         width: 110,

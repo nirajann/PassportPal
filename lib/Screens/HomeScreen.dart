@@ -3,7 +3,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:passportpal/Screens/loginScreen.dart';
 import 'package:passportpal/Screens/notiScreen.dart';
 import 'package:passportpal/Screens/processScreen.dart';
 import 'package:passportpal/utlis/ImageItem.dart';
@@ -62,197 +61,208 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // Your existing code...
-
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // While the authentication state is loading
-          return const CircularProgressIndicator();
-        } else if (snapshot.hasData && snapshot.data != null) {
-          // User is logged in
-          return Scaffold(
-            backgroundColor: whiteColor,
-            body: Column(
-              children: [
-                const SizedBox(
-                  height: 60,
+    // User is logged in
+    return Scaffold(
+      backgroundColor: whiteColor,
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 60,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 16.0),
+                child: Text(
+                  "Discover",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: navyBlue,
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 16.0),
-                      child: Text(
-                        "Discover",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: navyBlue,
+              ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _toggleSearchBar();
+                    },
+                    child: AnimSearchBar(
+                      width: 220,
+                      searchIconColor: navyBlue,
+                      textController: searchController,
+                      onSuffixTap: () {
+                        setState(() {
+                          searchController.clear();
+                        });
+                      },
+                      helpText: "Search Text...",
+                      autoFocus: true,
+                      onSubmitted: (String searchController) =>
+                          searchCountries(),
+                      closeSearchOnSuffixTap: false,
+                      animationDurationInMilli: 500,
+                      rtl: false,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationScreen(),
                         ),
+                      );
+                    },
+                    icon: const Icon(Icons.notifications_active_outlined),
+                    color: navyBlue,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          isShowUser
+              ? const SizedBox()
+              : Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                  child: Container(
+                    width: double.infinity,
+                    height: 160,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF4C4478), Color(0xFF0C0C69)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
                     ),
-                    Row(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            _toggleSearchBar();
-                          },
-                          child: AnimSearchBar(
-                            width: 220,
-                            searchIconColor: navyBlue,
-                            textController: searchController,
-                            onSuffixTap: () {
-                              setState(() {
-                                searchController.clear();
-                              });
-                            },
-                            helpText: "Search Text...",
-                            autoFocus: true,
-                            onSubmitted: (String searchController) =>
-                                searchCountries(),
-                            closeSearchOnSuffixTap: false,
-                            animationDurationInMilli: 500,
-                            rtl: false,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const NotificationScreen(),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.notifications_active_outlined),
-                          color: navyBlue,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                isShowUser
-                    ? const SizedBox()
-                    : Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                        child: Container(
-                          width: double.infinity,
-                          height: 160,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF4C4478), Color(0xFF0C0C69)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                          ),
-                          child: Row(
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 30, 0, 0),
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(20, 30, 0, 0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      child: const Text(
-                                        "PassportPal",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 15),
-                                    const Text(
-                                      "Empowering Global Explorers",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    const Text(
-                                      "Simplifying Visas and Unlocking\nEducation Opportunities",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: const Text(
+                                  "PassportPal",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
-                              Expanded(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Image.asset(
-                                      "assets/png/pplogo.png",
-                                      width: 165,
-                                      height: 165,
-                                      // Additional image properties as needed
-                                    ),
-                                  ),
+                              const SizedBox(height: 15),
+                              const Text(
+                                "Empowering Global Explorers",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              const Text(
+                                "Simplifying Visas and Unlocking\nEducation Opportunities",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                isShowUser
-                    ? Column(
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.arrow_back),
-                            color: navyBlue,
-                          ),
-                          const Text(
-                            'Search Result',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(25, 25, 0, 0),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                             child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'Popular Countries',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: navyBlue,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              alignment: Alignment.centerRight,
+                              child: Image.asset(
+                                "assets/png/pplogo.png",
+                                width: 165,
+                                height: 165,
+                                // Additional image properties as needed
                               ),
                             ),
                           ),
-                          FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+          isShowUser
+              ? Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.arrow_back),
+                      color: navyBlue,
+                    ),
+                    const Text(
+                      'Search Result',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(25, 25, 0, 0),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Popular Countries',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: navyBlue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                      future: FirebaseFirestore.instance
+                          .collection('Countries')
+                          .where('title',
+                              isGreaterThanOrEqualTo: searchController.text)
+                          .get(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                          return const Center(
+                            child: Text('No data found.'),
+                          );
+                        }
+
+                        var documents = snapshot.data!.docs;
+
+                        return SizedBox(
+                          height:
+                              90, // Adjust the height according to your needs
+                          child: FutureBuilder<
+                              QuerySnapshot<Map<String, dynamic>>>(
                             future: FirebaseFirestore.instance
                                 .collection('Countries')
-                                .where('title',
-                                    isGreaterThanOrEqualTo:
-                                        searchController.text)
                                 .get(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
@@ -261,88 +271,42 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: CircularProgressIndicator(),
                                 );
                               }
+                              if (snapshot.hasError) {
+                                return const Center(
+                                  child: Text('Error fetching data'),
+                                );
+                              }
                               if (!snapshot.hasData ||
                                   snapshot.data!.docs.isEmpty) {
                                 return const Center(
-                                  child: Text('No data found.'),
+                                  child: Text('No data available'),
                                 );
                               }
 
                               var documents = snapshot.data!.docs;
-
-                              return SizedBox(
-                                height:
-                                    90, // Adjust the height according to your needs
-                                child: FutureBuilder<
-                                    QuerySnapshot<Map<String, dynamic>>>(
-                                  future: FirebaseFirestore.instance
-                                      .collection('Countries')
-                                      .get(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-                                    if (snapshot.hasError) {
-                                      return const Center(
-                                        child: Text('Error fetching data'),
-                                      );
-                                    }
-                                    if (!snapshot.hasData ||
-                                        snapshot.data!.docs.isEmpty) {
-                                      return const Center(
-                                        child: Text('No data available'),
-                                      );
-                                    }
-
-                                    var documents = snapshot.data!.docs;
-                                    return ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: documents.length,
-                                      itemBuilder: (context, index) {
-                                        var data = documents[index].data();
-                                        var photoURL = data['photoURL'];
-                                        var title = data['title'];
-                                        return ItemWidget(
-                                            image: photoURL, title: title);
-                                      },
-                                    );
-                                  },
-                                ),
+                              return ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: documents.length,
+                                itemBuilder: (context, index) {
+                                  var data = documents[index].data();
+                                  var photoURL = data['photoURL'];
+                                  var title = data['title'];
+                                  return ItemWidget(
+                                      image: photoURL, title: title);
+                                },
                               );
                             },
                           ),
-                        ],
-                      ),
-                Expanded(
-                  child: isShowUser ? buildSearchResult() : buildTopCountries(),
-                ),
-              ],
-            ),
-          );
-        } else {
-          // User is not logged in
-          return Scaffold(
-            body: Center(
-              child: Column(
-                children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginScreen()),
                         );
                       },
-                      child: const Text('login'))
-                ],
-              ),
-            ),
-          );
-        }
-      },
+                    ),
+                  ],
+                ),
+          Expanded(
+            child: isShowUser ? buildSearchResult() : buildTopCountries(),
+          ),
+        ],
+      ),
     );
   }
 
@@ -439,16 +403,72 @@ class _HomeScreenState extends State<HomeScreen> {
                     var title = documents[index].data()['title'];
 
                     return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProcessScreen(
-                              image: imageUrl,
-                              title: title,
+                      onTap: () async {
+                        User? user = FirebaseAuth.instance.currentUser;
+
+                        if (user == null) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text(
+                                  'Login Required',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                content: const Text(
+                                  'Please log in to continue.',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                backgroundColor: Colors.blue[900],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      // Close the dialog
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      // Navigate to the login screen
+                                      Navigator.pushReplacementNamed(
+                                          context, '/login');
+                                    },
+                                    child: const Text(
+                                      'Login',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProcessScreen(
+                                image: imageUrl,
+                                title: title,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
                       },
                       child: Stack(
                         fit: StackFit.expand,
