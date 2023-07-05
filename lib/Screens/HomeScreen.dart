@@ -291,8 +291,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   var data = documents[index].data();
                                   var photoURL = data['photoURL'];
                                   var title = data['title'];
+                                  var documentId = documents[index]
+                                      .id; // Retrieve the document ID
                                   return ItemWidget(
-                                      image: photoURL, title: title);
+                                    image: photoURL,
+                                    title: title,
+                                    documentId:
+                                        documentId, // Pass the document ID to ItemWidget
+                                  );
                                 },
                               );
                             },
@@ -465,6 +471,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (context) => ProcessScreen(
                                 image: imageUrl,
                                 title: title,
+                                documentId: "",
                               ),
                             ),
                           );

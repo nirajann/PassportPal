@@ -6,11 +6,13 @@ import 'package:passportpal/Screens/processScreen.dart';
 class ItemWidget extends StatelessWidget {
   final String image;
   final String title;
+  final String documentId;
 
   const ItemWidget({
     Key? key,
     required this.image,
     required this.title,
+    required this.documentId, // Pass the document ID to the widget
   }) : super(key: key);
 
   @override
@@ -81,6 +83,7 @@ class ItemWidget extends StatelessWidget {
               builder: (context) => ProcessScreen(
                 image: image,
                 title: title,
+                documentId: documentId,
               ),
             ),
           );
