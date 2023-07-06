@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'instafly',
+        title: 'PassporPal',
         theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: mobileBackgroundColor,
         ),

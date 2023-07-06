@@ -48,20 +48,21 @@ class _UniScreenState extends State<UniScreen> {
                     _searchQuery = value;
                   });
                 },
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Search',
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.search,
                     color: Colors.white,
                   ),
                   filled: true,
                   fillColor: navyBlue,
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: const BorderSide(
                       color: Colors.white,
                     ),
                   ),
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     color: Colors.white,
                   ),
                 ),
@@ -69,68 +70,76 @@ class _UniScreenState extends State<UniScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          FutureBuilder<QuerySnapshot>(
-            future: FirebaseFirestore.instance.collection('universities').get(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return const Center(
-                  child: Text('No data found.'),
-                );
-              }
-
-              final documents = snapshot.data!.docs;
-
-              final filteredDocuments = documents.where((doc) {
-                final String uniname = doc['uniname'] as String;
-                return uniname
-                    .toLowerCase()
-                    .contains(_searchQuery.toLowerCase());
-              }).toList();
-
-              return Column(
-                children: filteredDocuments.asMap().entries.map((entry) {
-                  final int index = entry.key;
-                  final QueryDocumentSnapshot<Object?> doc = entry.value;
-
-                  final Map<String, dynamic> data =
-                      doc.data() as Map<String, dynamic>;
-                  final String text = data['uniname'] as String;
-                  final String unilocation = data['unilocation'] as String;
-                  final String logo = data['logo'] as String;
-                  final String description = data['unides'] as String;
-                  final int fee = int.parse(data['unifee'].toString());
-                  final int rate = data['unirate'] as int;
-                  final int likes = data['likes'].length;
-                  final String unid = data['unid'];
-
-                  final Color color =
-                      gridItemColors[index % gridItemColors.length];
-
-                  return GestureDetector(
-                    onTap: () {
-                      navigateToUniversityDetail(context, text, unilocation,
-                          logo, description, fee, rate, likes, unid);
-                    },
-                    child: RectangleCard(
-                      text: text,
-                      unilocation: unilocation,
-                      color: color,
-                      imagePath: logo,
-                      description: description,
-                      fee: fee,
-                      rate: rate,
-                      likes: likes,
-                      unid: unid,
-                    ),
+          Expanded(
+            child: FutureBuilder<QuerySnapshot>(
+              future:
+                  FirebaseFirestore.instance.collection('universities').get(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
-                }).toList(),
-              );
-            },
+                }
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(
+                    child: Text('No data found.'),
+                  );
+                }
+
+                final documents = snapshot.data!.docs;
+
+                final filteredDocuments = documents.where((doc) {
+                  final String uniname = doc['uniname'] as String;
+                  return uniname
+                      .toLowerCase()
+                      .contains(_searchQuery.toLowerCase());
+                }).toList();
+
+                return GridView.count(
+                  crossAxisCount: 1,
+                  childAspectRatio: 3,
+                  padding: const EdgeInsets.all(8),
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  children: filteredDocuments.asMap().entries.map((entry) {
+                    final int index = entry.key;
+                    final QueryDocumentSnapshot<Object?> doc = entry.value;
+
+                    final Map<String, dynamic> data =
+                        doc.data() as Map<String, dynamic>;
+                    final String text = data['uniname'] as String;
+                    final String unilocation = data['unilocation'] as String;
+                    final String logo = data['logo'] as String;
+                    final String description = data['unides'] as String;
+                    final int fee = int.parse(data['unifee'].toString());
+                    final int rate = data['unirate'] as int;
+                    final int likes = data['likes'].length;
+                    final String unid = data['unid'];
+
+                    final Color color =
+                        gridItemColors[index % gridItemColors.length];
+
+                    return GestureDetector(
+                      onTap: () {
+                        navigateToUniversityDetail(context, text, unilocation,
+                            logo, description, fee, rate, likes, unid);
+                      },
+                      child: RectangleCard(
+                        text: text,
+                        unilocation: unilocation,
+                        color: color,
+                        imagePath: logo,
+                        description: description,
+                        fee: fee,
+                        rate: rate,
+                        likes: likes,
+                        unid: unid,
+                      ),
+                    );
+                  }).toList(),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -191,72 +200,62 @@ class RectangleCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: () {
-          navigateToUniversityDetail(context, text, unilocation, imagePath,
-              description, rate, fee, likes, unid);
-        },
-        child: ClipRRect(
+    return InkWell(
+      onTap: () {
+        navigateToUniversityDetail(context, text, unilocation, imagePath,
+            description, rate, fee, likes, unid);
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
-          child: Container(
-            width: 332,
-            height: 135,
-            decoration: BoxDecoration(
-              color: color,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+        ),
+        elevation: 4,
+        color: color,
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.network(
+                imagePath,
+                width: 120,
+                height: 120,
+              ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image(
-                  image: NetworkImage(imagePath),
-                  width: 100,
-                  height: 100,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 45, 0, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          text,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Center(
-                          child: Text(
-                            unilocation,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      ],
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      text,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 8),
+                    Text(
+                      unilocation,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
