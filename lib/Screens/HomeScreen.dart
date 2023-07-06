@@ -344,6 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
             var data = documents[index].data();
             var photoURL = data['photoURL'];
             var title = data['title'];
+            var uid = data['uid'];
             var color = gridItemColors[index % gridItemColors.length];
             return GridItem(
               color: color,
@@ -360,11 +361,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return CarouselSlider(
       options: CarouselOptions(
         height: 330,
-        viewportFraction: 0.6,
+        //scroll animation
+        viewportFraction: 0.8,
         initialPage: 0,
         enableInfiniteScroll: true,
         reverse: false,
-        autoPlay: false,
+        autoPlay: true,
         autoPlayInterval: const Duration(seconds: 3),
         autoPlayAnimationDuration: const Duration(milliseconds: 800),
         autoPlayCurve: Curves.fastOutSlowIn,
@@ -378,7 +380,7 @@ class _HomeScreenState extends State<HomeScreen> {
               borderRadius: BorderRadius.circular(30),
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                margin: const EdgeInsets.symmetric(horizontal: 0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   color: Colors
@@ -407,6 +409,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     var imageUrl = documents[index].data()['background'];
                     var title = documents[index].data()['title'];
+                    var uid = documents[index].data()['uid'];
 
                     return GestureDetector(
                       onTap: () async {
@@ -471,14 +474,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (context) => ProcessScreen(
                                 image: imageUrl,
                                 title: title,
-                                documentId: "",
+                                documentId: uid,
                               ),
                             ),
                           );
                         }
                       },
                       child: Stack(
-                        fit: StackFit.expand,
+                        fit: StackFit.passthrough,
                         children: [
                           Image.network(
                             imageUrl,

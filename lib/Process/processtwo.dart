@@ -34,7 +34,7 @@ class _ProcessTwoScreenState extends State<ProcessTwoScreen> {
             color: Colors.blue,
           ),
           onPressed: () {
-            // Implement your back button logic here
+            Navigator.pop(context);
           },
         ),
       ),
@@ -103,13 +103,13 @@ class _ProcessTwoScreenState extends State<ProcessTwoScreen> {
                           ),
                           const SizedBox(height: 18),
                           Text(
-                            data['ProcessOneDes'],
+                            data['ProcessTwoDes'],
                             style: const TextStyle(
                               fontSize: 16,
                             ),
                           ),
                           Image.network(
-                            widget.image,
+                            data['ProcessTwoImg'],
                             width: 300,
                             height: 200,
                             fit: BoxFit.fill,

@@ -34,7 +34,7 @@ class _ProcessFiveScreenState extends State<ProcessFiveScreen> {
             color: Colors.blue,
           ),
           onPressed: () {
-            // Implement your back button logic here
+            Navigator.pop(context);
           },
         ),
       ),
@@ -127,7 +127,7 @@ class _ProcessFiveScreenState extends State<ProcessFiveScreen> {
                             ),
                           ),
                           Image.network(
-                            widget.image,
+                            data['ProcessFiveImg'],
                             width: 300,
                             height: 200,
                             fit: BoxFit.fill,

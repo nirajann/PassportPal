@@ -36,7 +36,7 @@ class _ProcessSixScreenState extends State<ProcessSixScreen> {
             color: Colors.blue,
           ),
           onPressed: () {
-            // Implement your back button logic here
+            Navigator.pop(context);
           },
         ),
       ),
@@ -111,7 +111,7 @@ class _ProcessSixScreenState extends State<ProcessSixScreen> {
                             ),
                           ),
                           Image.network(
-                            widget.image,
+                            data['ProcessSixImg'],
                             width: 300,
                             height: 200,
                             fit: BoxFit.fill,

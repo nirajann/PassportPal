@@ -126,6 +126,47 @@ class ProfileScreen extends StatelessWidget {
                       child: Icon(Icons.logout_outlined)),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                    16, 280, 0, 0), // Adjust the left padding as needed
+                child: ListTile(
+                  title:
+                      const Text('Mini Heading 1.2', textAlign: TextAlign.left),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment
+                        .start, // Align the buttons to the left
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          // Add functionality for Text Button 3
+                        },
+                        child: const Text(
+                          'Trending',
+                          style: TextStyle(color: Colors.black, fontSize: 20),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // Add functionality for Text Button 1
+                        },
+                        child: const Text(
+                          'News',
+                          style: TextStyle(color: Colors.black, fontSize: 20),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // Add functionality for Text Button 2
+                        },
+                        child: const Text(
+                          'Favorite',
+                          style: TextStyle(color: Colors.black, fontSize: 20),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           );
         },

@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:passportpal/widgets/unicommentcard.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/user.dart';
 import '../resources/FirestoreMethod.dart';
@@ -199,7 +200,7 @@ class UniversityDetailPage extends StatelessWidget {
                                           ),
                                         ),
                                         Text(
-                                          universityData['fee'].toString(),
+                                          universityData['unifee'].toString(),
                                           style: const TextStyle(
                                             fontSize: 14,
                                             color: Colors.white,
@@ -221,7 +222,7 @@ class UniversityDetailPage extends StatelessWidget {
                                           ),
                                         ),
                                         Text(
-                                          universityData['rate'].toString(),
+                                          universityData['unirate'].toString(),
                                           style: const TextStyle(
                                             fontSize: 14,
                                             color: Colors.white,
@@ -320,7 +321,10 @@ class UniversityDetailPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                var url = universityData['uniLink'];
+                                launch(url);
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: primaryColor,
                                 shape: RoundedRectangleBorder(

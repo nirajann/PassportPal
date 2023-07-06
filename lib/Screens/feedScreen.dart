@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import '../models/user.dart';
 
 class FeedScreen extends StatefulWidget {
-  const FeedScreen({super.key});
+  const FeedScreen({Key? key}) : super(key: key);
 
   @override
   State<FeedScreen> createState() => _FeedScreenState();
@@ -21,17 +21,8 @@ class _FeedScreenState extends State<FeedScreen> {
   TextEditingController searchController = TextEditingController();
   String selectedCountry = 'All';
 
-  final List<Color> gridItemColors = [
-    const Color.fromRGBO(247, 141, 16, 1),
-    const Color.fromRGBO(124, 17, 245, 1),
-    const Color.fromRGBO(81, 240, 67, 1),
-    const Color.fromRGBO(240, 103, 67, 1),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -43,8 +34,7 @@ class _FeedScreenState extends State<FeedScreen> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const Material(child: AddPostScreen())),
+              MaterialPageRoute(builder: (context) => const AddPostScreen()),
             );
           },
         ),
@@ -62,25 +52,23 @@ class _FeedScreenState extends State<FeedScreen> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(15, 3, 15, 0),
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
             child: TextField(
               controller: searchController,
               decoration: InputDecoration(
                 hintText: 'Search...',
-                hintStyle: const TextStyle(color: Colors.white),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    // Handle the search button click event
-                  },
-                  icon: const Icon(Icons.search, color: Colors.white),
-                ),
+                hintStyle: TextStyle(color: Colors.grey[400]),
+                prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
+                filled: true,
+                fillColor: Colors.grey[200],
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide.none,
                 ),
-                filled: true,
-                fillColor: primaryColor,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               ),
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black),
               onSubmitted: (String value) {
                 // Perform search operation with the submitted value
                 // You can update the UI or trigger a search function here
@@ -91,109 +79,61 @@ class _FeedScreenState extends State<FeedScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(
-              0,
-              60,
-              0,
-              0,
-            ),
+            padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedCountry = 'All';
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        selectedCountry == 'All' ? navyBlue : primaryColor,
-                    fixedSize: const Size(30, 30),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text('All'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedCountry = 'USA';
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        selectedCountry == 'USA' ? navyBlue : primaryColor,
-                    fixedSize: const Size(30, 30),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text('USA'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedCountry = 'CAN';
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        selectedCountry == 'CAN' ? navyBlue : primaryColor,
-                    fixedSize: const Size(30, 30),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text('CAN'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedCountry = 'Jap';
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        selectedCountry == 'Jap' ? navyBlue : primaryColor,
-                    fixedSize: const Size(30, 30),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text('Jap'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedCountry = 'Aus';
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        selectedCountry == 'Aus' ? navyBlue : primaryColor,
-                    fixedSize: const Size(30, 30),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text('Aus'),
-                ),
+                _buildCountryButton('All'),
+                _buildCountryButton('USA'),
+                _buildCountryButton('CAN'),
+                _buildCountryButton('Jap'),
+                _buildCountryButton('Aus'),
               ],
             ),
           ),
           PostsWidget(
-              selectedCountry: selectedCountry,
-              searchController: searchController)
+            selectedCountry: selectedCountry,
+            searchController: searchController,
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildCountryButton(String country) {
+    final isSelected = selectedCountry == country;
+
+    return InkWell(
+      onTap: () {
+        setState(() {
+          selectedCountry = country;
+        });
+      },
+      borderRadius: BorderRadius.circular(8),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        width: 60,
+        height: 40,
+        decoration: BoxDecoration(
+          color: isSelected ? navyBlue : primaryColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Center(
+          child: Text(
+            country,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ),
       ),
     );
   }
 }
 
 class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({super.key});
+  const AddPostScreen({Key? key}) : super(key: key);
 
   @override
   State<AddPostScreen> createState() => _AddPostScreenState();
@@ -202,23 +142,24 @@ class AddPostScreen extends StatefulWidget {
 class _AddPostScreenState extends State<AddPostScreen> {
   Uint8List? _file;
   final TextEditingController _descriptionController = TextEditingController();
-  bool _isloading = false;
+  bool _isLoading = false;
 
-  void PostImage(
-    String uid,
-    String username,
-    String profImages,
-  ) async {
+  void postImage(String uid, String username, String profImages) async {
     setState(() {
-      _isloading = true;
+      _isLoading = true;
     });
     try {
       String res = await FirestoreMethods().uploadPost(
-          _descriptionController.text, uid, username, _file!, profImages);
+        _descriptionController.text,
+        uid,
+        username,
+        _file!,
+        profImages,
+      );
 
       if (res == "success") {
         setState(() {
-          _isloading = false;
+          _isLoading = false;
         });
         clearImage();
         showSnackBar("Posted", context);
@@ -230,49 +171,50 @@ class _AddPostScreenState extends State<AddPostScreen> {
     }
   }
 
-  _selectimage(BuildContext context) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            title: const Text('create a post'),
-            children: [
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Take A photo'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  Uint8List file = await pickImage(ImageSource.camera);
+  Future<void> _selectImage(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text('Create a post'),
+          children: [
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(20),
+              child: const Text('Take A photo'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                Uint8List? file = await pickImage(ImageSource.camera);
+                if (file != null) {
                   setState(() {
                     _file = file;
                   });
-                },
-              ),
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Choose from Gallery'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  Uint8List file = await pickImage(ImageSource.gallery);
+                }
+              },
+            ),
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(20),
+              child: const Text('Choose from Gallery'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                Uint8List? file = await pickImage(ImageSource.gallery);
+                if (file != null) {
                   setState(() {
                     _file = file;
                   });
-                },
-              ),
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Cancel'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  Uint8List file = await pickImage(ImageSource.gallery);
-                  setState(() {
-                    _file = file;
-                  });
-                },
-              )
-            ],
-          );
-        });
+                }
+              },
+            ),
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(20),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void clearImage() {
@@ -283,18 +225,19 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     _descriptionController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final User user = Provider.of<UserProvider>(context).getUser;
+
     return _file == null
         ? Center(
             child: IconButton(
               icon: const Icon(Icons.upload),
-              onPressed: () => _selectimage(context),
+              onPressed: () => _selectImage(context),
             ),
           )
         : Scaffold(
@@ -309,8 +252,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
               actions: [
                 TextButton(
                   onPressed: () =>
-                      PostImage(user.uid, user.username, user.photoUrl),
-                  child: _isloading
+                      postImage(user.uid, user.username, user.photoUrl),
+                  child: _isLoading
                       ? const Center(
                           child: CircularProgressIndicator(
                             color: Colors.white,
@@ -320,59 +263,63 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       : const Text(
                           "Post",
                           style: TextStyle(
-                              color: Colors.purple,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16),
+                            color: Colors.purple,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
-                )
+                ),
               ],
             ),
-            body: Column(children: [
-              _isloading
-                  ? const Center(
-                      child: LinearProgressIndicator(
-                        color: Colors.white,
-                        backgroundColor: Colors.black,
-                      ),
-                    )
-                  : const Padding(padding: EdgeInsets.only(top: 0)),
-              const Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(user.photoUrl),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: TextField(
-                      controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        hintText: 'write Caption...',
-                        border: InputBorder.none,
-                      ),
-                      maxLines: 8,
+            body: Column(
+              children: [
+                _isLoading
+                    ? const Center(
+                        child: LinearProgressIndicator(
+                          color: Colors.white,
+                          backgroundColor: Colors.black,
+                        ),
+                      )
+                    : const SizedBox(height: 0),
+                const Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(user.photoUrl),
                     ),
-                  ),
-                  SizedBox(
-                    height: 45,
-                    width: 45,
-                    child: AspectRatio(
-                      aspectRatio: 487 / 451,
-                      child: Container(
-                        decoration: BoxDecoration(
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: TextField(
+                        controller: _descriptionController,
+                        decoration: const InputDecoration(
+                          hintText: 'Write Caption...',
+                          border: InputBorder.none,
+                        ),
+                        maxLines: 8,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 45,
+                      width: 45,
+                      child: AspectRatio(
+                        aspectRatio: 487 / 451,
+                        child: Container(
+                          decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: MemoryImage(_file!),
-                                fit: BoxFit.fill,
-                                alignment: FractionalOffset.topCenter)),
+                              image: MemoryImage(_file!),
+                              fit: BoxFit.fill,
+                              alignment: FractionalOffset.topCenter,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  const Divider()
-                ],
-              )
-            ]),
+                  ],
+                ),
+              ],
+            ),
           );
   }
 }

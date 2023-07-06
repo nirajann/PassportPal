@@ -33,7 +33,7 @@ class _ProcessFourScreenState extends State<ProcessFourScreen> {
             color: Colors.blue,
           ),
           onPressed: () {
-            // Implement your back button logic here
+            Navigator.pop(context);
           },
         ),
       ),
@@ -108,7 +108,7 @@ class _ProcessFourScreenState extends State<ProcessFourScreen> {
                             ),
                           ),
                           Image.network(
-                            widget.image,
+                            data['ProcessFourImg'],
                             width: 300,
                             height: 200,
                             fit: BoxFit.fill,

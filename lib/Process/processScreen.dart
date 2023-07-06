@@ -33,7 +33,7 @@ class _ProcessScreenState extends State<ProcessScreen> {
             color: Colors.blue,
           ),
           onPressed: () {
-            // Implement your back button logic here
+            Navigator.pop(context);
           },
         ),
       ),
@@ -108,7 +108,7 @@ class _ProcessScreenState extends State<ProcessScreen> {
                             ),
                           ),
                           Image.network(
-                            widget.image,
+                            data['ProcessOneImg'],
                             width: 300,
                             height: 200,
                             fit: BoxFit.fill,

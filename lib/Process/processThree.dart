@@ -34,7 +34,7 @@ class _ProcessThreeScreenState extends State<ProcessThreeScreen> {
             color: Colors.blue,
           ),
           onPressed: () {
-            // Implement your back button logic here
+            Navigator.pop(context);
           },
         ),
       ),
@@ -109,7 +109,7 @@ class _ProcessThreeScreenState extends State<ProcessThreeScreen> {
                             ),
                           ),
                           Image.network(
-                            widget.image,
+                            data['ProcessThreeImg'],
                             width: 300,
                             height: 200,
                             fit: BoxFit.fill,
