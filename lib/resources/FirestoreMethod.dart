@@ -112,4 +112,47 @@ class FirestoreMethods {
       print(e.toString());
     }
   }
+
+  Future<void> PostUniComment(String postId, String text, String uid,
+      String name, String profilepic) async {
+    try {
+      if (text.isNotEmpty) {
+        String commentId = const Uuid().v1();
+        await _firestore
+            .collection('universities')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .set({
+          'text': text,
+          'profilepic': profilepic,
+          'name': name,
+          'commentid': commentId,
+          'datePublished': DateTime.now()
+        });
+      } else {
+        print('text is empty');
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> likeUniPost(String uniId, String uid, List<String> likes) async {
+    try {
+      if (likes.contains(uid)) {
+        await _firestore.collection('universities').doc(uniId).update({
+          'likes': FieldValue.arrayRemove([uid])
+        });
+      } else {
+        await _firestore.collection('universities').doc(uniId).update({
+          'likes': FieldValue.arrayUnion([uid])
+        });
+      }
+    } catch (e) {
+      print("vhor");
+      print(uniId);
+      print(e.toString());
+    }
+  }
 }

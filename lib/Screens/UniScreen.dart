@@ -103,8 +103,10 @@ class _UniScreenState extends State<UniScreen> {
                   final String unilocation = data['unilocation'] as String;
                   final String logo = data['logo'] as String;
                   final String description = data['unides'] as String;
-                  final int fee = data['unifee'];
-                  final int rate = data['unirate'];
+                  final int fee = int.parse(data['unifee'].toString());
+                  final int rate = data['unirate'] as int;
+                  final int likes = data['likes'].length;
+                  final String unid = data['unid'];
 
                   final Color color =
                       gridItemColors[index % gridItemColors.length];
@@ -112,7 +114,7 @@ class _UniScreenState extends State<UniScreen> {
                   return GestureDetector(
                     onTap: () {
                       navigateToUniversityDetail(context, text, unilocation,
-                          logo, description, fee, rate);
+                          logo, description, fee, rate, likes, unid);
                     },
                     child: RectangleCard(
                       text: text,
@@ -122,6 +124,8 @@ class _UniScreenState extends State<UniScreen> {
                       description: description,
                       fee: fee,
                       rate: rate,
+                      likes: likes,
+                      unid: unid,
                     ),
                   );
                 }).toList(),
@@ -134,17 +138,22 @@ class _UniScreenState extends State<UniScreen> {
   }
 
   void navigateToUniversityDetail(
-      BuildContext context,
-      String text,
-      String unilocation,
-      String logo,
-      String description,
-      int unirate,
-      int fee) {
+    BuildContext context,
+    String text,
+    String unilocation,
+    String logo,
+    String description,
+    int unirate,
+    int likes,
+    int fee,
+    String unid,
+  ) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => UniversityDetailPage(
+          unid: unid,
+          likes: likes,
           text: text,
           unilocation: unilocation,
           logo: logo,
@@ -165,6 +174,8 @@ class RectangleCard extends StatelessWidget {
   final String description;
   final int rate;
   final int fee;
+  final int likes;
+  final String unid;
 
   const RectangleCard({
     Key? key,
@@ -175,6 +186,8 @@ class RectangleCard extends StatelessWidget {
     required this.description,
     required this.rate,
     required this.fee,
+    required this.likes,
+    required this.unid,
   }) : super(key: key);
 
   @override
@@ -183,8 +196,8 @@ class RectangleCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          navigateToUniversityDetail(
-              context, text, unilocation, imagePath, description, rate, fee);
+          navigateToUniversityDetail(context, text, unilocation, imagePath,
+              description, rate, fee, likes, unid);
         },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30),
@@ -256,33 +269,23 @@ class RectangleCard extends StatelessWidget {
       String logo,
       String description,
       int unirate,
-      int fee) {
+      int fee,
+      int likes,
+      String unid) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => UniversityDetailPage(
+          unid: unid,
           text: text,
           unilocation: unilocation,
           logo: logo,
           description: description,
           rate: unirate,
           fee: fee,
+          likes: likes,
         ),
       ),
     );
   }
 }
-
-// void navigateToUniversityDetail(
-//     BuildContext context, String text, String unilocation, String logo) {
-//   Navigator.push(
-//     context,
-//     MaterialPageRoute(
-//       builder: (context) => UniversityDetailPage(
-//         text: text,
-//         unilocation: unilocation,
-//         logo: logo,
-//       ),
-//     ),
-//   );
-// }
