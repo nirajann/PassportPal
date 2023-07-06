@@ -21,37 +21,37 @@ class ProfileScreen extends StatelessWidget {
           title: const Center(child: Text('Profile')),
           backgroundColor: primaryColor,
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Icon(Icons.account_circle, size: 120, color: primaryColor),
-              const SizedBox(height: 16.0),
-              const Text(
-                'Please log in to view your profile',
-                style: TextStyle(fontSize: 18.0, color: primaryColor),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()),
-                  );
-                },
-                child: const Text('Log In'),
-              ),
-            ],
-          ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(Icons.account_circle, size: 120, color: primaryColor),
+            const SizedBox(height: 16.0),
+            const Text(
+              'Please log in to view your profile',
+              style: TextStyle(fontSize: 18.0),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
+              },
+              child: const Text('Log In'),
+            ),
+          ],
         ),
       );
     }
 
     Future<DocumentSnapshot<Map<String, dynamic>>> getUserData() async {
-      return FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      return FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
     }
 
     return Scaffold(

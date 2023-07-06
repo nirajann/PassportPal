@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:passportpal/provider/user_provider.dart';
-import 'package:passportpal/utlis/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:passportpal/models/user.dart';
+import 'package:passportpal/provider/user_provider.dart';
+import 'package:passportpal/resources/FirestoreMethod.dart';
+import 'package:passportpal/utlis/colors.dart';
 import 'package:passportpal/widgets/unicommentcard.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../models/user.dart';
-import '../resources/FirestoreMethod.dart';
 
 class UniversityDetailPage extends StatelessWidget {
   final String unid;
@@ -22,6 +21,7 @@ class UniversityDetailPage extends StatelessWidget {
 
   const UniversityDetailPage({
     Key? key,
+    required this.unid,
     required this.text,
     required this.unilocation,
     required this.logo,
@@ -29,12 +29,12 @@ class UniversityDetailPage extends StatelessWidget {
     required this.fee,
     required this.rate,
     required this.likes,
-    required this.unid,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final User user = Provider.of<UserProvider>(context).getUser;
+
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
@@ -56,11 +56,16 @@ class UniversityDetailPage extends StatelessWidget {
                   .doc(unid)
                   .snapshots(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 }
+                if (!snapshot.hasData) {
+                  return Container();
+                }
 
-                var universityData = snapshot.data!.data();
+                final universityData =
+                    snapshot.data!.data() as Map<String, dynamic>?;
+
                 if (universityData == null) {
                   return Container();
                 }
@@ -71,8 +76,7 @@ class UniversityDetailPage extends StatelessWidget {
                       width: double.infinity,
                       height: 342,
                       child: Image(
-                        image: NetworkImage(
-                            (universityData as Map<String, dynamic>)['logo']),
+                        image: NetworkImage(universityData['logo']),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -115,7 +119,7 @@ class UniversityDetailPage extends StatelessWidget {
                                               unid,
                                               user.uid,
                                               universityData['likes']
-                                                  .cast<String>(),
+                                                  as List<String>,
                                             );
                                           },
                                           icon: universityData['likes']
@@ -131,7 +135,7 @@ class UniversityDetailPage extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 4),
                                         Text(
-                                          (universityData['likes'])
+                                          universityData['likes']
                                               .length
                                               .toString(),
                                           style: const TextStyle(
@@ -144,10 +148,11 @@ class UniversityDetailPage extends StatelessWidget {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      UniCommentCard(
-                                                        uid: unid,
-                                                      )),
+                                                builder: (context) =>
+                                                    UniCommentCard(
+                                                  uid: unid,
+                                                ),
+                                              ),
                                             );
                                           },
                                           child: const Icon(
@@ -163,7 +168,7 @@ class UniversityDetailPage extends StatelessWidget {
                                           ),
                                         ),
                                       ],
-                                    )
+                                    ),
                                   ],
                                 ),
                               ],
@@ -321,9 +326,13 @@ class UniversityDetailPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 var url = universityData['uniLink'];
-                                launch(url);
+                                if (await canLaunch(url)) {
+                                  await launch(url);
+                                } else {
+                                  throw 'Could not launch $url';
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: primaryColor,

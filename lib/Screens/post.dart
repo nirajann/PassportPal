@@ -76,7 +76,7 @@ class PostsWidget extends StatelessWidget {
               },
             );
           } else {
-            return unAuthorized(); // Return an empty container to display nothing
+            return const UnAuthorized(); // Return an empty container to display nothing
           }
         },
       ),
