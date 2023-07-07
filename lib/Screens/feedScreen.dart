@@ -28,15 +28,21 @@ class _FeedScreenState extends State<FeedScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: false,
-        leading: IconButton(
-          icon: const Icon(Icons.add_a_photo),
-          color: primaryColor,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AddPostScreen()),
-            );
-          },
+        leading: Material(
+          type: MaterialType.transparency, // Set the desired type of Material
+          child: IconButton(
+            icon: const Icon(Icons.add_a_photo),
+            color: primaryColor,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const Material(
+                        child:
+                            AddPostScreen())), // Wrap AddPostScreen with Material widget
+              );
+            },
+          ),
         ),
         title: const Center(
           child: Text(

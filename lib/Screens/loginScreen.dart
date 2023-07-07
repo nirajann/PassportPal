@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:passportpal/resources/auth_methods.dart';
 import 'package:passportpal/responsive/mobileScreenLayout.dart';
 import 'package:passportpal/responsive/responsivelayoutscreen.dart';
@@ -32,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
     passwordController.dispose();
   }
 
-  void LoginUser() async {
+  void loginUser() async {
     setState(() {
       isloading = true;
     });
@@ -43,10 +42,11 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     if (res == 'success') {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => const ResponsiveLayout(
-                mobileScreenLayout: MobileScreenLayout(),
-                webScreenLayout: WebScreenLayout(),
-              )));
+        builder: (context) => const ResponsiveLayout(
+          mobileScreenLayout: MobileScreenLayout(),
+          webScreenLayout: WebScreenLayout(),
+        ),
+      ));
     } else {
       showSnackBar(res, context);
     }
@@ -70,9 +70,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     Stack(
                       children: [
                         Container(
-                          child: SvgPicture.asset(
-                            'assets/registerHeader.svg',
+                          height: 250,
+                          width: double.infinity,
+                          decoration: const BoxDecoration(
                             color: primaryColor,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(
+                                  20.0), // Rounded top left corner
+                              topRight: Radius.circular(
+                                  20.0), // Rounded top right corner
+                              bottomLeft: Radius.circular(
+                                  60), // No rounding at the bottom left
+                              bottomRight: Radius.circular(
+                                  60), // No rounding at the bottom right
+                            ),
                           ),
                         ),
                         Padding(
@@ -85,9 +96,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             "Sign in",
                             style: TextStyle(
                               fontSize: 30,
-                              color: Colors.grey, // Set the text color to black
-                              fontWeight:
-                                  FontWeight.bold, // Set the text to bold
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
@@ -97,17 +107,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             "Welcome Back",
                             style: TextStyle(
                               fontSize: 20,
-                              color: Colors.grey, // Set the text color to black
-                              fontWeight:
-                                  FontWeight.bold, // Set the text to bold
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                       ],
                     ),
-
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 70, 0),
+                      padding: EdgeInsets.fromLTRB(
+                          20, 0, constraints.maxWidth >= 768 ? 320 : 70, 0),
                       child: TextFieldInput(
                         hintText: "Email",
                         textInputType: TextInputType.text,
@@ -118,7 +127,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 20,
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 70, 0),
+                      padding: EdgeInsets.fromLTRB(
+                          20, 0, constraints.maxWidth >= 768 ? 320 : 70, 0),
                       child: TextFieldInput(
                         hintText: "Password",
                         textInputType: TextInputType.text,
@@ -130,19 +140,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         InkWell(
                           onTap: () {
-                            LoginUser();
+                            loginUser();
                           },
                           child: Container(
                             alignment: Alignment.center,
-                            margin: const EdgeInsets.only(
-                                left: 20, right: 40, top: 10),
-                            padding: const EdgeInsets.only(left: 50, right: 50),
+                            margin: EdgeInsets.only(
+                                left: 20,
+                                right: constraints.maxWidth >= 768 ? 40 : 0,
+                                top: 10),
+                            padding: EdgeInsets.only(
+                                left: constraints.maxWidth >= 768 ? 50 : 20,
+                                right: constraints.maxWidth >= 768 ? 50 : 20),
                             height: 54,
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
-                                  colors: [primaryColor, primaryColor],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight),
+                                colors: [
+                                  primaryColor,
+                                  primaryColor,
+                                ],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
                               borderRadius: BorderRadius.circular(20),
                               color: Colors.grey[200],
                               boxShadow: const [
@@ -188,9 +206,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 23,
                                 23,
                                 23,
-                              ), // Set the text color to black
-                              fontWeight:
-                                  FontWeight.bold, // Set the text to bold
+                              ),
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           TextButton(
@@ -198,18 +215,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const RegisterScreen()),
+                                  builder: (context) => const RegisterScreen(),
+                                ),
                               );
                             },
                             child: const Text(
                               'Sign Up',
                               style: TextStyle(
                                 fontSize: 15,
-                                color:
-                                    primaryColor, // Set the text color to black
-                                fontWeight:
-                                    FontWeight.bold, // Set the text to bold
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
@@ -218,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const Expanded(
                       child: SizedBox(),
-                    ), // Push the content to the top when the keyboard is displayed
+                    ),
                   ],
                 ),
               ),

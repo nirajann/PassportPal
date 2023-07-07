@@ -84,7 +84,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(140, 90, 0, 0),
+                padding: const EdgeInsets.fromLTRB(180, 90, 0, 0),
                 child: SizedBox(
                   height: 100,
                   width: 100,
@@ -98,7 +98,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               Padding(
-                padding: const EdgeInsets.fromLTRB(110, 200, 0, 0),
+                padding: const EdgeInsets.fromLTRB(180, 200, 0, 0),
                 child: Text(
                   userData?['username'],
                   style: const TextStyle(
@@ -110,7 +110,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8.0),
               Padding(
-                padding: const EdgeInsets.fromLTRB(110, 230, 0, 0),
+                padding: const EdgeInsets.fromLTRB(150, 230, 0, 0),
                 child: Text(
                   userData?['email'],
                   style: const TextStyle(
@@ -121,7 +121,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               Padding(
-                padding: const EdgeInsets.fromLTRB(145, 260, 0, 0),
+                padding: const EdgeInsets.fromLTRB(180, 260, 0, 0),
                 child: InkWell(
                   onTap: () {
                     Navigator.push(

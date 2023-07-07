@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:passportpal/responsive/mobileScreenLayout.dart';
-import 'package:passportpal/responsive/responsivelayoutscreen.dart';
 import 'package:passportpal/responsive/webScreenLayout.dart';
 import 'package:passportpal/utlis/colors.dart';
+
+import '../responsive/mobileScreenLayout.dart';
+import '../responsive/responsivelayoutscreen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -26,22 +27,19 @@ class SplashScreen extends StatelessWidget {
           final double screenWidth = constraints.maxWidth;
 
           return Stack(
-            fit: StackFit.expand,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(1, 0, 0, 0),
-                child: SizedBox(
-                  height: 25,
-                  child: Image.asset(
-                    'assets/png/Splashscreen.png',
-                    fit: BoxFit.cover,
-                  ),
+              ClipPath(
+                clipper: BottomClipper(),
+                child: Container(
+                  color: navyBlue,
+                  height: screenWidth * 1.5,
+                  width: double.infinity,
                 ),
               ),
               Image.asset(
                 'assets/png/mainlogo.png',
-                height: screenHeight * 0.8,
-                width: screenWidth * 0.8,
+                height: screenHeight * 0.9,
+                width: screenWidth * 0.9,
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(0, screenHeight * 0.3, 0, 0),
@@ -85,7 +83,7 @@ class SplashScreen extends StatelessWidget {
                         height: 90,
                       ),
                       CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(whiteColor),
+                        valueColor: AlwaysStoppedAnimation<Color>(navyBlue),
                       ),
                     ],
                   ),
@@ -97,4 +95,24 @@ class SplashScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class BottomClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final double radius = size.width * 0.3;
+    final Path path = Path()
+      ..lineTo(0, size.height - radius)
+      ..quadraticBezierTo(0, size.height, radius, size.height)
+      ..lineTo(size.width - radius, size.height)
+      ..quadraticBezierTo(
+          size.width, size.height, size.width, size.height - radius)
+      ..lineTo(size.width, 0)
+      ..close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }

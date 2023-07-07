@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:passportpal/Screens/splashscreen.dart';
 import 'package:passportpal/provider/user_provider.dart';
-import 'package:passportpal/responsive/mobileScreenLayout.dart';
-import 'package:passportpal/responsive/responsivelayoutscreen.dart';
-import 'package:passportpal/responsive/webScreenLayout.dart';
 import 'package:passportpal/utlis/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +24,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

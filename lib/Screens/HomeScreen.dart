@@ -468,13 +468,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           );
                         } else {
+                          print(title);
+                          print(imageUrl);
+                          print(uid);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ProcessScreen(
                                 image: imageUrl,
                                 title: title,
-                                documentId: uid,
+                                documentId: documents[index].id,
                               ),
                             ),
                           );
