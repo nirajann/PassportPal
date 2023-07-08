@@ -77,7 +77,7 @@ class CurvedBottomNavigationBar extends StatelessWidget {
             backgroundColor: const Color.fromARGB(255, 241, 238, 238),
             items: [
               buildNavItem(Icons.info_outline, 0),
-              buildNavItem(Icons.chat_bubble_outline, 1),
+              buildNavItem(Icons.people, 1),
               buildNavItem(Icons.home_outlined, 2),
               buildNavItem(Icons.school_outlined, 3),
               buildNavItem(Icons.person_2_outlined, 4),
