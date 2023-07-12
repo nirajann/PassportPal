@@ -13,6 +13,7 @@ class FirestoreMethods {
       Uint8List file, String profImages) async {
     String res = 'some error occured';
     try {
+      res = "success";
       String photoUrl =
           await StorageMethod().uploadImageToStorage('posts', file, true);
       String postId = const Uuid().v1();

@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:passportpal/Screens/editprofile.dart';
-import 'package:passportpal/Screens/loginScreen.dart';
 import 'package:passportpal/resources/auth_methods.dart';
 import 'package:passportpal/utlis/colors.dart';
+
+import '../auth/loginScreen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);

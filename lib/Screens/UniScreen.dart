@@ -63,7 +63,7 @@ class _UniScreenState extends State<UniScreen> {
                     ),
                   ),
                   labelStyle: const TextStyle(
-                    color: Colors.white,
+                    color: primaryColor,
                   ),
                 ),
               ),

@@ -8,3 +8,11 @@ const primaryColor = Color(0xFF625CFF);
 const navyBlue = Color.fromRGBO(41, 49, 165, 1.0);
 const greenColor = Color(0x0066f043);
 const secondaryColor = Color(0x002931a5);
+
+hexStringToColor(String hexColor) {
+  hexColor = hexColor.toUpperCase().replaceAll("#", "");
+  if (hexColor.length == 6) {
+    hexColor = "FF$hexColor";
+  }
+  return Color(int.parse(hexColor, radix: 16));
+}
