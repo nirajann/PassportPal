@@ -131,12 +131,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: Container(
-              height: 150,
+              height: 130,
               color: primaryColor,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(140, 90, 0, 0),
+            padding: const EdgeInsets.fromLTRB(140, 50, 0, 0),
             child: InkWell(
               onTap: () {
                 showDialog(
@@ -193,7 +193,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
           ),
           const Padding(
-            padding: EdgeInsets.fromLTRB(140, 210, 0, 10),
+            padding: EdgeInsets.fromLTRB(140, 150, 0, 10),
             child: Text(
               'Change Picture',
               style:
@@ -202,7 +202,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           const SizedBox(height: 16.0),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 240, 0, 10),
+            padding: const EdgeInsets.fromLTRB(0, 200, 0, 10),
             child: Center(
               child: Column(
                 children: [

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:passportpal/Screens/uniDetailpage.dart';
 import 'package:passportpal/utlis/colors.dart';
 
@@ -22,6 +23,8 @@ class _UniScreenState extends State<UniScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final User? user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -157,21 +160,41 @@ class _UniScreenState extends State<UniScreen> {
     int fee,
     String unid,
   ) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => UniversityDetailPage(
-          unid: unid,
-          likes: likes,
-          text: text,
-          unilocation: unilocation,
-          logo: logo,
-          description: description,
-          rate: unirate,
-          fee: fee,
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UniversityDetailPage(
+            unid: unid,
+            likes: likes,
+            text: text,
+            unilocation: unilocation,
+            logo: logo,
+            description: description,
+            rate: unirate,
+            fee: fee,
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      // Pass dummy data
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UniversityDetailPage(
+            unid: unid,
+            text: text,
+            unilocation: unilocation,
+            logo: logo,
+            description: 'Dummy description',
+            rate: 0,
+            fee: 0,
+            likes: 0,
+          ),
+        ),
+      );
+    }
   }
 }
 
@@ -199,7 +222,6 @@ class RectangleCard extends StatelessWidget {
     required this.unid,
   }) : super(key: key);
 
-  @override
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -271,20 +293,42 @@ class RectangleCard extends StatelessWidget {
       int fee,
       int likes,
       String unid) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => UniversityDetailPage(
-          unid: unid,
-          text: text,
-          unilocation: unilocation,
-          logo: logo,
-          description: description,
-          rate: unirate,
-          fee: fee,
-          likes: likes,
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UniversityDetailPage(
+            unid: unid,
+            text: text,
+            unilocation: unilocation,
+            logo: logo,
+            description: description,
+            rate: unirate,
+            fee: fee,
+            likes: likes,
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      // Pass dummy data
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const UniversityDetailPage(
+            unid: "2asdas",
+            text: "Passport Pal Universty Guide",
+            unilocation: "kAthmandu,Nepal",
+            logo:
+                "https://th.bing.com/th/id/OIP.YHVG8LxBhqtMxYPa4-enxgAAAA?pid=ImgDet&w=247&h=296&rs=1",
+            description:
+                'Welcome to our Visa and University Information app! We understand that planning your education abroad can be a complex',
+            rate: 0,
+            fee: 0,
+            likes: 0,
+          ),
+        ),
+      );
+    }
   }
 }

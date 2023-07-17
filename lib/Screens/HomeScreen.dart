@@ -60,8 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Your existing code...
-    // User is logged in
+   
     return Scaffold(
       backgroundColor: whiteColor,
       body: Column(

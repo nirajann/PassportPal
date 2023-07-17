@@ -10,10 +10,10 @@ class PostsWidget extends StatelessWidget {
   final TextEditingController searchController;
 
   const PostsWidget({
-    super.key,
+    Key? key,
     required this.selectedCountry,
     required this.searchController,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +35,8 @@ class PostsWidget extends StatelessWidget {
             final User user = userSnapshot.data!;
 
             return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: FirebaseFirestore.instance
-                  .collection('posts')
-                  .where('description',
-                      isEqualTo:
-                          selectedCountry != 'All' ? selectedCountry : null)
-                  .where('description', isGreaterThanOrEqualTo: selectedCountry)
-                  .snapshots(),
+              stream:
+                  FirebaseFirestore.instance.collection('posts').snapshots(),
               builder: (
                 context,
                 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
@@ -56,16 +51,12 @@ class PostsWidget extends StatelessWidget {
                 }
 
                 if (snapshot.hasData) {
-                  final filteredPosts = snapshot.data!.docs
-                      .where((doc) => doc['username']
-                          .toLowerCase()
-                          .contains(searchController.text.toLowerCase()))
-                      .toList();
+                  final posts = snapshot.data!.docs;
 
                   return ListView.builder(
-                    itemCount: filteredPosts.length,
+                    itemCount: posts.length,
                     itemBuilder: (context, index) => PostCard(
-                      snap: filteredPosts[index].data(),
+                      snap: posts[index].data(),
                     ),
                   );
                 } else if (snapshot.hasError) {
@@ -76,7 +67,7 @@ class PostsWidget extends StatelessWidget {
               },
             );
           } else {
-            return const UnAuthorized(); // Return an empty container to display nothing
+            return const UnAuthorized();
           }
         },
       ),

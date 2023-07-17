@@ -148,17 +148,43 @@ class ProfileScreen extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: InkWell(
                   onTap: () async {
-                    await AuthMethods().signOut();
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
-                      ),
+                    // Show logout confirmation dialog
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Logout'),
+                          content:
+                              const Text('Are you sure you want to logout?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                Navigator.of(context).pop(); // Close the dialog
+                                await AuthMethods().signOut();
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text('Logout'),
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
                   child: const SizedBox(
-                      height: 60,
-                      width: 60,
-                      child: Icon(Icons.logout_outlined)),
+                    height: 60,
+                    width: 60,
+                    child: Icon(Icons.logout_outlined),
+                  ),
                 ),
               ),
               Padding(
